@@ -3,19 +3,19 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.choong.spr.mapper.BoardMapper">
-	<select id="getList" resultType="com.choong.spr.domain.BoardDto">
-		SELECT id, title, inserted
-		FROM Board
-		ORDER BY id DESC
-	</select>
 	<insert id="writeBoard" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		INSERT INTO Board (title, body, inserted)
 		VALUES (#{title}, #{body}, #{inserted})
 	</insert>
 	<select id="getBoard" resultType="com.choong.spr.domain.BoardDto">
-		SELECT id, title, body, inserted
-		FROM Board
-		WHERE id = #{id}
+		SELECT b.id id, 
+			   b.title title, 
+			   b.body body,
+			   b.inserted inserted,
+			   COUNT(r.id) numOfReply
+		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
+		WHERE b.id = #{id}
+		GROUP BY b.id
 	</select>
 	<update id="updateBoard">
 		UPDATE Board
@@ -23,4 +23,32 @@
 			body = #{body}
 		WHERE id = #{id}
 	</update>
+	<delete id="removeBoard">
+		DELETE FROM Board
+		WHERE id = #{id}
+	</delete>
+	<select id="searchBoard" resultType="com.choong.spr.domain.BoardDto">
+		SELECT b.id id, 
+			   b.title title,
+			   b.inserted inserted,
+			   COUNT(r.id) numOfReply
+		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
+		WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+		GROUP BY b.id
+		ORDER BY id DESC
+	</select>
+	<select id="countBoard" resultType="int">
+		SELECT COUNT(id) totalCount
+		FROM Board
+	</select>
+	<select id="pagingBoard" resultType="com.choong.spr.domain.BoardDto">
+		SELECT b.id id, 
+			   b.title title,
+			   b.inserted inserted,
+			   COUNT(r.id) numOfReply
+		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
+		GROUP BY b.id
+		ORDER BY id DESC
+		LIMIT #{from}, #{row}
+	</select>
 </mapper>

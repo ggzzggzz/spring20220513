@@ -20,7 +20,37 @@
 		<div class="row">
 			<div class="col">
 				<h1>글 목록</h1>
-			
+				
+				<c:if test="${not empty param.removeSuccess }">
+					<c:if test="${param.removeSuccess }">
+						<div class="alert alert-primary">게시물이 삭제되었습니다.</div>
+					</c:if>
+					<c:if test="${not param.removeSuccess }">
+						<div class="alert alert-danger">게시물을 삭제하는데에 문제가 발생하였습니다.</div>
+					</c:if>
+				</c:if>
+				
+				<form action="${appRoot }/board/search">
+					<div style="float: right">
+						<input type="text" name="searchKeyword" />
+						<button class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
+					</div>
+				</form>
+				
+				<br /><br />
+				
+				<form action="${appRoot }/board/paging">
+					<input type="hidden" name="page" value="${pageInfo.current }" />
+					<div style="float: right">
+						<select name="pageNum" id="pageNum">
+							<option value="5" ${param.pageNum == '5' ? 'selected="selected"' : '' }>5개씩 보기</option>
+							<option value="10" ${param.pageNum == '10' ? 'selected="selected"' : '' }>10개씩 보기</option>
+							<option value="${count }" ${param.pageNum == count ? 'selected="selected"' : '' }>전체보기</option>
+						</select>
+						<button class="btn btn-info">보기</button>
+					</div>
+				</form>
+				
 				<table class="table">
 					<thead>
 						<tr>
@@ -37,12 +67,17 @@
 								
 								<c:url value="${board.id }" var="link"></c:url>
 								<a href="${link }">${board.title }</a>
+								<c:if test="${board.numOfReply > 0 }">
+									[${board.numOfReply }]
+								</c:if>
 								</td>
 								<td>${board.inserted }</td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
+				
+				<my:PageNation path="paging" />
 			</div>
 		</div>
 	</div>

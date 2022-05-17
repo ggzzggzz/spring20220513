@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.choong.spr.domain.BoardDto;
+import com.choong.spr.domain.PageInfoDto;
+import com.choong.spr.domain.ReplyDto;
 import com.choong.spr.service.BoardService;
+import com.choong.spr.service.ReplyService;
 
 @Controller
 @RequestMapping("board")
@@ -21,11 +25,10 @@ public class BoardController {
 	@Autowired
 	private BoardService service;
 	
-	@RequestMapping("list")
-	public void list(Model model) {
-		List<BoardDto> list = service.getList();
-		model.addAttribute("boardList", list);
-	}
+	@Autowired
+	private ReplyService replyService;
+	
+	
 	
 	@GetMapping("write")
 	public void write() {
@@ -44,8 +47,10 @@ public class BoardController {
 	@GetMapping("{id}")
 	public String get(@PathVariable("id") int id, Model model) {
 		BoardDto board = service.getBoard(id);
+		List<ReplyDto> list = replyService.getReply(id);
 		
 		model.addAttribute("board", board);
+		model.addAttribute("replyList", list);
 		
 		return "board/get";
 	}
@@ -57,5 +62,49 @@ public class BoardController {
 		rttr.addAttribute("modifySuccess", success);
 		
 		return "redirect:/board/" + board.getId();
+	}
+	
+	@PostMapping("remove")
+	public String remove(int id, RedirectAttributes rttr) {
+		boolean success = service.removeBoard(id);
+		
+		rttr.addAttribute("removeSuccess", success);
+		
+		return "redirect:/board/list";
+	}
+	
+	@GetMapping("search")
+	public String search(String searchKeyword, Model model) {
+		List<BoardDto> board = service.searchBoard(searchKeyword);
+		
+		model.addAttribute("boardList", board);
+		model.addAttribute("searchKeyword", searchKeyword);
+		
+		return "board/list";
+	}
+	
+	@GetMapping({"paging", "list"})
+	public String paging(@RequestParam(name="page", defaultValue = "1") int page, 
+			@RequestParam(name="pageNum", defaultValue="5") int rowPerPage, Model model) {
+		List<BoardDto> board = service.pagingBoard(page, rowPerPage);
+		
+		int totalCount = service.countBoard();
+		
+		int end = totalCount / rowPerPage;
+		
+		if(totalCount % rowPerPage > 0) {
+			end++;
+		}
+		
+		PageInfoDto pageInfo = new PageInfoDto();
+		pageInfo.setCurrent(page);
+		pageInfo.setEnd(end);
+		
+		model.addAttribute("boardList", board);
+		model.addAttribute("pageNum", rowPerPage);
+		model.addAttribute("pageInfo", pageInfo);
+		model.addAttribute("count", totalCount);
+		
+		return "board/list";
 	}
 }
