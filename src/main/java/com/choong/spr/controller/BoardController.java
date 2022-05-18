@@ -73,22 +73,23 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@GetMapping("search")
-	public String search(String searchKeyword, Model model) {
-		List<BoardDto> board = service.searchBoard(searchKeyword);
-		
-		model.addAttribute("boardList", board);
-		model.addAttribute("searchKeyword", searchKeyword);
-		
-		return "board/list";
-	}
+//	@GetMapping("search")
+//	public String search(String searchKeyword, Model model) {
+//		List<BoardDto> board = service.searchBoard(searchKeyword);
+//		
+//		model.addAttribute("boardList", board);
+//		model.addAttribute("searchKeyword", searchKeyword);
+//		
+//		return "board/list";
+//	}
 	
-	@GetMapping({"paging", "list"})
+	@GetMapping({"paging", "list", "search"})
 	public String paging(@RequestParam(name="page", defaultValue = "1") int page, 
-			@RequestParam(name="pageNum", defaultValue="5") int rowPerPage, Model model) {
-		List<BoardDto> board = service.pagingBoard(page, rowPerPage);
+			@RequestParam(name="pageNum", defaultValue="5") int rowPerPage, 
+			@RequestParam(name="searchKeyword", defaultValue="") String searchKeyword, Model model) {
+		List<BoardDto> board = service.pagingBoard(page, rowPerPage, searchKeyword);
 		
-		int totalCount = service.countBoard();
+		int totalCount = service.countBoard(searchKeyword);
 		
 		int end = totalCount / rowPerPage;
 		
@@ -102,6 +103,7 @@ public class BoardController {
 		
 		model.addAttribute("boardList", board);
 		model.addAttribute("pageNum", rowPerPage);
+		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("pageInfo", pageInfo);
 		model.addAttribute("count", totalCount);
 		

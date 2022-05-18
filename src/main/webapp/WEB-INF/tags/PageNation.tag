@@ -10,6 +10,7 @@
 			<c:url value="${path }" var="link">
 				<c:param name="page" value="${pageNum }"></c:param>
 				<c:param name="pageNum" value="${param.pageNum }"></c:param>
+				<c:param name="searchKeyword" value="${param.searchKeyword }"></c:param>
 			</c:url>
 			
 			<li class="page-item ${pageInfo.current == pageNum ? 'active' : '' }">

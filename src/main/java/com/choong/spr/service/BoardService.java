@@ -47,19 +47,19 @@ public class BoardService {
 		return cnt == 1;
 	}
 
-	public List<BoardDto> searchBoard(String searchKeyword) {
-		return mapper.searchBoard(searchKeyword);
-	}
+//	public List<BoardDto> searchBoard(String searchKeyword) {
+//		return mapper.searchBoard(searchKeyword);
+//	}
 
-	public List<BoardDto> pagingBoard(int page, int rowPerPage) {
+	public List<BoardDto> pagingBoard(int page, int rowPerPage, String searchKeyword) {
 		
 		int from = (page - 1) * rowPerPage;
 		
-		return mapper.pagingBoard(from, rowPerPage);
+		return mapper.pagingBoard(from, rowPerPage, searchKeyword);
 	}
 
-	public int countBoard() {
-		return mapper.countBoard();
+	public int countBoard(String searchKeyword) {
+		return mapper.countBoard(searchKeyword);
 	}
 
 }

@@ -40,6 +40,9 @@
 	<select id="countBoard" resultType="int">
 		SELECT COUNT(id) totalCount
 		FROM Board
+		<if test="searchKeyword != null">
+		WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
+		</if>
 	</select>
 	<select id="pagingBoard" resultType="com.choong.spr.domain.BoardDto">
 		SELECT b.id id, 
@@ -47,6 +50,7 @@
 			   b.inserted inserted,
 			   COUNT(r.id) numOfReply
 		FROM Board b LEFT JOIN Reply r ON b.id = r.board_id
+		WHERE title LIKE CONCAT('%', #{searchKeyword}, '%')
 		GROUP BY b.id
 		ORDER BY id DESC
 		LIMIT #{from}, #{row}

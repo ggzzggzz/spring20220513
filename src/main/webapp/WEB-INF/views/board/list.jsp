@@ -32,7 +32,7 @@
 				
 				<form action="${appRoot }/board/search">
 					<div style="float: right">
-						<input type="text" name="searchKeyword" />
+						<input type="text" name="searchKeyword" value="${param.searchKeyword }" />
 						<button class="btn btn-info"><i class="fa-solid fa-magnifying-glass"></i></button>
 					</div>
 				</form>

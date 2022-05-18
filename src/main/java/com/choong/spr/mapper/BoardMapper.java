@@ -18,8 +18,8 @@ public interface BoardMapper {
 
 	List<BoardDto> searchBoard(String searchKeyword);
 
-	int countBoard();
+	int countBoard(String searchKeyword);
 
-	List<BoardDto> pagingBoard(@Param("from") int from, @Param("row") int rowPerPage);
+	List<BoardDto> pagingBoard(@Param("from") int from, @Param("row") int rowPerPage, @Param("searchKeyword") String searchKeyword);
 
 }

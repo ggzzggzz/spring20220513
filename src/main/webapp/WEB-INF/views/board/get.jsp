@@ -114,14 +114,6 @@
 	<div class="container mt-3">
 		<div class="row">
 			<div class="col">
-				<c:if test="${not empty param.insertReplySuccess }">
-					<c:if test="${param.insertReplySuccess }">
-						<div class="alert alert-primary">댓글을 등록하였습니다.</div>
-					</c:if>
-					<c:if test="${not param.insertReplySuccess }">
-						<div class="alert alert-danger">댓글을 등록하는데에 문제가 발생하였습니다.</div>
-					</c:if>
-				</c:if>
 				<form action="${appRoot }/reply/insert" method="post">
 					<div class="input-group">
 						<input type="hidden" name="boardId" value="${board.id }" />
@@ -137,8 +129,14 @@
 	<div class="container mt-3">
 		<div class="row">
 			<div class="col">
-				<h3>댓글 ${board.numOfReply }개</h3>
-				
+				<c:if test="${not empty param.insertReplySuccess }">
+					<c:if test="${param.insertReplySuccess }">
+						<div class="alert alert-primary">댓글을 등록하였습니다.</div>
+					</c:if>
+					<c:if test="${not param.insertReplySuccess }">
+						<div class="alert alert-danger">댓글을 등록하는데에 문제가 발생하였습니다.</div>
+					</c:if>
+				</c:if>
 				<c:if test="${not empty param.modifyReplySuccess }">
 					<c:if test="${param.modifyReplySuccess }">
 						<div class="alert alert-primary">댓글을 수정하였습니다.</div>
@@ -156,6 +154,8 @@
 						<div class="alert alert-danger">댓글을 삭제하는데에 문제가 발생하였습니다.</div>
 					</c:if>
 				</c:if>
+				<h3>댓글 ${board.numOfReply }개</h3>
+				
 				
 				<ul class="list-group">
 					<c:forEach items="${replyList }" var="reply" >
