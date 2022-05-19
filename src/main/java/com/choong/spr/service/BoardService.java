@@ -22,7 +22,7 @@ public class BoardService {
 	
 
 	public boolean writeBoard(BoardDto board) {
-		board.setInserted(LocalDateTime.now());
+//		board.setInserted(LocalDateTime.now());
 		int cnt = mapper.writeBoard(board);
 		
 		return cnt == 1;

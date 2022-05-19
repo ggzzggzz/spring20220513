@@ -20,7 +20,7 @@ public class ReplyService {
 	}
 
 	public boolean insertReply(ReplyDto reply) {
-		reply.setInserted(LocalDateTime.now());
+//		reply.setInserted(LocalDateTime.now());
 		
 		int cnt = mapper.insertReply(reply);
 		
