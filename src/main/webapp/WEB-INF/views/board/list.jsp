@@ -51,8 +51,8 @@
 					</div>
 				</form>
 				
-				<table class="table">
-					<thead>
+				<table class="table table-striped">
+					<thead class="table-dark">
 						<tr>
 							<th>id</th>
 							<th>title</th>
